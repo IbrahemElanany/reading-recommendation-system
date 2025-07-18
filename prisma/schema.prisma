@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id        Int               @id @default(autoincrement())
+  email     String            @unique
+  name      String?
+  password  String
+  role      Role              @default(USER) @map("role")
+  intervals ReadingInterval[]
+
+  @@map("users")
+}
+
+model Book {
+  id             Int               @id @default(autoincrement())
+  title          String
+  numberOfPages  Int               @default(0) @map("number_of_pages")
+  intervals      ReadingInterval[]
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+
+  @@map("books")
+}
+
+model ReadingInterval {
+  id        Int    @id @default(autoincrement())
+  startPage Int    @map("start_page")
+  endPage   Int    @map("end_page")
+  bookId    Int    @map("book_id")
+  userId    Int    @map("user_id")
+  book      Book   @relation(fields: [bookId], references: [id])
+  user      User   @relation(fields: [userId], references: [id])
+
+  @@index([bookId])
+  @@map("reading_intervals")
+}
