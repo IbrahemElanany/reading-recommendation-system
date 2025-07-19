@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   api:
+    image: reading-recommendation-api
     container_name: reading-recommendation-api
     build:
       context: .
