@@ -12,6 +12,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { AuthModule } from './auth/auth.module';
 import { LoggerModule } from './logger/logger.module';
 import { ThrottleGuard } from './common/guards/throttle.guard';
+import { BooksModule } from './books/books.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { ThrottleGuard } from './common/guards/throttle.guard';
     PrismaModule,
     AuthModule,
     LoggerModule,
+    BooksModule
   ],
   controllers: [AppController],
   providers: [
