@@ -24,6 +24,20 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/reading_recommendation?schema=public
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      # Cache configuration
+      - ENABLE_CACHE=true
+      - CACHE_TTL=300
+      - CACHE_MAX=1000
+      - TOP_BOOKS_CACHE_TTL=300
+      # JWT configuration
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+      - JWT_EXPIRES_IN=24h
+      - PASSWORD_SALT_ROUNDS=12
+      # Rate limiting
+      - RATE_LIMIT=100
+      - RATE_DURATION=60
+      # Logging
+      - LOG_LEVEL=debug
     depends_on:
       postgres:
         condition: service_healthy
@@ -56,7 +70,7 @@ services:
       - "6380:6379"
     volumes:
       - redis_data:/data
-    command: redis-server --appendonly yes
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s

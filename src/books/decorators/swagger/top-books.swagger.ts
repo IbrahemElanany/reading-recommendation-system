@@ -1,13 +1,20 @@
 import { applyDecorators, HttpStatus } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { TopBooksResponseDto } from '../../dto/responses/top-books-response.dto';
 
 export const TopBooksSwagger = () => {
   return applyDecorators(
     ApiBearerAuth(),
+    ApiQuery({
+      name: 'limit',
+      required: false,
+      type: Number,
+      description: 'Number of top books to retrieve (default: 5, max: 100)',
+      example: 5,
+    }),
     ApiOperation({
       summary: 'Get top rated books',
-      description: 'Retrieves a list of top rated books (User access required)',
+      description: 'Retrieves a list of top rated books sorted by unique pages read (User access required)',
     }),
     ApiResponse({
       status: HttpStatus.OK,
