@@ -16,10 +16,11 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from '@prisma/client';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { BookTransformer } from '../transformers/book.transformer';
 import { LoggerService } from 'src/logger/logger.service';
 import { CreateBookSwagger } from '../decorators/swagger/create-book.swagger';
+import { UpdateBookSwagger } from '../decorators/swagger/update-book.swagger';
 
 @ApiTags('Books')
 @ApiBearerAuth()
@@ -32,6 +33,8 @@ export class BooksController {
 
   /**
    * Create a new book (Admin only)
+   * @param book CreateBookDto
+   * @returns The created book
    */
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -52,14 +55,15 @@ export class BooksController {
 
   /**
    * Update an existing book (Admin only)
+   * @param id Book ID
+   * @param updateBookDto UpdateBookDto
+   * @returns The updated book
    */
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Update a book', description: 'Updates a book by ID (Admin only)' })
-  @ApiParam({ name: 'id', type: Number, description: 'Book ID' })
-  @ApiResponse({ status: 200, description: 'Book updated successfully' })
+  @UpdateBookSwagger()
   async updateBook(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateBookDto: UpdateBookDto,

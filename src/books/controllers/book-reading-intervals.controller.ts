@@ -11,12 +11,12 @@ import { ReadingIntervalService } from '../services/reading-interval.service';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { User, Role } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { ReadingIntervalResponseDto } from '../dto/responses/reading-interval-response.dto';
 import { LoggerService } from 'src/logger/logger.service';
 import { SingleIntervalDto } from '../dto/single-interval.dto';
+import { CreateReadingIntervalsSwagger } from '../decorators/swagger/reading-intervals.swagger';
 
 @ApiTags('Books')
 @Controller('books')
@@ -28,13 +28,15 @@ export class BookReadingIntervalsController {
 
   /**
    * Submit a single reading interval for a book (one by one)
+   * @param dto SingleIntervalDto
+   * @param userId Current user ID (from JWT)
+   * @returns Success status
    */
   @Post('reading-interval')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.USER)
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Submit a single reading interval for a book' })
-  @ApiResponse({ status: 201, description: 'Interval submitted', schema: { example: { status_code: 'success' } } })
+  @CreateReadingIntervalsSwagger()
   async submitSingleReadingInterval(
     @Body() dto: SingleIntervalDto,
     @CurrentUser('id') userId: number,
