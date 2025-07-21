@@ -4,12 +4,12 @@ import {
   Post,
   SetMetadata
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
+import { AuthService } from '../services/auth.service';
+import { RegisterDto } from '../dto/register.dto';
+import { LoginDto } from '../dto/login.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { RegisterSwagger } from './decorators/swagger/register.swagger';
-import { LoginSwagger } from './decorators/swagger/login.swagger';
+import { RegisterSwagger } from '../decorators/swagger/register.swagger';
+import { LoginSwagger } from '../decorators/swagger/login.swagger';
 
 @ApiTags('Auth')
 @Controller('auth')

@@ -5,13 +5,13 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from '../dto/register.dto';
+import { LoginDto } from '../dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcryptjs';
-import { AuthRepository } from './auth.repository';
-import { LoggerService } from '../logger/logger.service';
+import { AuthRepository } from '../repository/auth.repository';
+import { LoggerService } from '../../logger/logger.service';
 
 const LOGGER_CONTEXT = 'AuthService';
 
